@@ -1,0 +1,66 @@
+<script>
+	import Header from './Components/Header.svelte';
+	import LyricForm from './Components/LyricForm.svelte';
+	import History from './Components/History.svelte';
+</script>
+
+<main>
+	<Header />
+	<History />
+	<LyricForm />
+</main>
+
+<style>
+	main {
+		text-align: center;
+		max-width: 240px;
+		margin: 0 auto;
+	}
+
+	h1 {
+		color: #ff3e00;
+		text-transform: uppercase;
+		font-size: 4em;
+		font-weight: 100;
+	}
+
+	@media (min-width: 640px) {
+		main {
+			max-width: none;
+		}
+	}
+
+	:global(body) {
+		background-color: azure;
+	}
+
+	:global(button) {
+		color: rgba(0, 0, 0, 0.87);
+		box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+		background-color: #e0e0e0;
+		padding: 6px 16px;
+		font-size: 0.875rem;
+		min-width: 64px;
+		box-sizing: border-box;
+		transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+		font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+		font-weight: 500;
+		line-height: 1.75;
+		border-radius: 4px;
+		letter-spacing: 0.02857em;
+		text-transform: uppercase;
+		border: 0;
+		cursor: pointer;
+		display: inline-flex;
+		outline: 0;
+		position: relative;
+		align-items: center;
+		user-select: none;
+		vertical-align: middle;
+		justify-content: center;
+		text-decoration: none;
+		-webkit-appearance: none;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+</style>
