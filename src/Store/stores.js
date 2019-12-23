@@ -4,12 +4,24 @@ export const loading = writable(false);
 export const lyrics = writable(null);
 export const lyricError = writable(null);
 export const showHistory = writable(false);
+export const history = writable([]);
 
-export async function fetchLyrics (artist, song) {
+export function toTitleCase(str) {
+    return str.replace(
+        /\w\S*/g,
+        function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+    );
+}
+
+export async function fetchLyrics (artist, song, fromHistoryPage = false) {
     loading.set(true);
+    const titleCaseArtist = toTitleCase(artist);
+    const titleCaseSong = toTitleCase(song);
 
     try {
-        const response = await fetch(`https://api.lyrics.ovh/v1/${artist}/${song}`);
+        const response = await fetch(`https://api.lyrics.ovh/v1/${titleCaseArtist}/${titleCaseSong}`);
         const data = await response.json();
         console.warn('response', data);
         console.warn('No lyrics', data.error);
@@ -17,8 +29,13 @@ export async function fetchLyrics (artist, song) {
         if (data.error) {
             lyricError.set(data.error);
         }
+        else if (fromHistoryPage) {
+            lyrics.set(data);
+            showHistory.set(false);
+        }
         else {
             lyrics.set(data);
+            history.update(history => [...history, {artist: titleCaseArtist, song: titleCaseSong}])
         }
 
         loading.set(false);

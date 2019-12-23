@@ -1,5 +1,8 @@
 <script>
-    import {showHistory} from '../Store/stores.js';
+    import {showHistory, history, loading, fetchLyrics} from '../Store/stores.js';
+    import Loader from './Loader.svelte';
+
+    $: console.log('history', $history)
 </script>
 
 <section>
@@ -7,20 +10,25 @@
         <h1>History</h1>
         <table>
             <thead>
-            <tr>
-                <th>#</th>
-                <th>Artist</th>
-                <th>Song</th>
-            </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Artist</th>
+                    <th>Song</th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>Smash Mouth</td>
-                <td>All Star</td>
-            </tr>
+                {#each $history as {artist, song}, i}
+                    <tr on:click={() => fetchLyrics(artist, song, true)}>
+                        <td>{i + 1}</td>
+                        <td>{artist}</td>
+                        <td>{song}</td>
+                    </tr>
+                {/each}
             </tbody>
         </table>
+    {/if}
+    {#if $loading && $showHistory}
+        <Loader/>
     {/if}
 </section>
 
@@ -31,16 +39,19 @@
         border-spacing: 0;
         border-collapse: collapse;
     }
+
     thead {
         display: table-header-group;
         vertical-align: middle;
         border-color: inherit;
     }
+
     tbody {
         display: table-row-group;
         vertical-align: middle;
         border-color: inherit;
     }
+
     tr {
         color: inherit;
         display: table-row;
@@ -48,6 +59,7 @@
         vertical-align: middle;
         border-color: inherit
     }
+
     th {
         color: rgba(0, 0, 0, 0.87);
         font-weight: 500;
@@ -61,6 +73,7 @@
         letter-spacing: 0.01071em;
         vertical-align: inherit;
     }
+
     td {
         color: rgba(0, 0, 0, 0.87);
         display: table-cell;

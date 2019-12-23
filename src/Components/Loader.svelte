@@ -7,6 +7,7 @@
 
 <style>
     .lds-ring {
+        margin-top: 8%;
         display: inline-block;
         position: relative;
         width: 80px;

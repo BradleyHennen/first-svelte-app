@@ -1,12 +1,8 @@
 <script>
-    import {loading, showHistory} from '../Store/stores.js';
-    import Loader from './Loader.svelte';
+    import {showHistory} from '../Store/stores.js';
 </script>
 
 <header>
-<!--    {#if $loading}-->
-<!--        <Loader/>-->
-<!--    {/if}-->
     <h1>Svelte Application</h1>
     <h3>Lyric Finder</h3>
     <nav>
