@@ -5,6 +5,8 @@ export const lyrics = writable(null);
 export const lyricError = writable(null);
 export const showHistory = writable(false);
 export const history = writable([]);
+export const currentArtist = writable('');
+export const currentSong =writable('');
 
 export function toTitleCase(str) {
     return str.replace(
@@ -19,6 +21,8 @@ export async function fetchLyrics (artist, song, fromHistoryPage = false) {
     loading.set(true);
     const titleCaseArtist = toTitleCase(artist);
     const titleCaseSong = toTitleCase(song);
+    currentArtist.set(titleCaseArtist);
+    currentSong.set(titleCaseSong);
 
     try {
         const response = await fetch(`https://api.lyrics.ovh/v1/${titleCaseArtist}/${titleCaseSong}`);

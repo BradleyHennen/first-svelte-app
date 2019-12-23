@@ -1,6 +1,6 @@
 <script>
     import Loader from './Loader.svelte';
-    import {fetchLyrics, loading, lyrics, showHistory} from '../Store/stores.js';
+    import {fetchLyrics, loading, lyrics, showHistory, currentArtist, currentSong} from '../Store/stores.js';
 
     $: console.warn($lyrics);
     let artist = '';
@@ -11,13 +11,13 @@
     {#if !$showHistory}
         <h2>Search For Lyrics</h2>
         <form>
-            <label>
+            <label for="artist">
                 Artist
-                <input bind:value={artist}/>
+                <input id="artist" type="text" class="validate" bind:value={artist}>
             </label>
-            <label>
+            <label for="song">
                 Song
-                <input bind:value={song}/>
+                <input id="song" type="text" class="validate" bind:value={song}>
             </label>
             <br/>
             <button on:click|preventDefault={() => fetchLyrics(artist, song)}>
@@ -29,6 +29,8 @@
         {/if}
 
         {#if !$loading && $lyrics}
+            <h3>Artist: {$currentArtist}</h3>
+            <h3>Song: {$currentSong}</h3>
             <p>{$lyrics.lyrics}</p>
         {/if}
     {/if}
@@ -36,6 +38,20 @@
 
 
 <style>
+    label, input {
+        margin: 4%;
+    }
+
+    input {
+        padding: 4%;
+        border: 1px solid darkgrey;
+        border-radius: 4px;
+    }
+
+    button {
+        margin-bottom: 6%;
+    }
+
     section, form, p {
         display: flex;
         flex-direction: column;
@@ -43,13 +59,8 @@
         align-items: center;
     }
 
-    input {
-        margin: 2%;
-    }
-
     p {
-        margin: 5%;
+        margin: 2%;
         white-space: pre-wrap;
     }
-
 </style>
