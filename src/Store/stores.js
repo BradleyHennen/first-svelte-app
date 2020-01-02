@@ -34,10 +34,12 @@ export async function fetchLyrics (artist, song, fromHistoryPage = false) {
             lyricError.set(data.error);
         }
         else if (fromHistoryPage) {
+            lyricError.set(null);
             lyrics.set(data);
             showHistory.set(false);
         }
         else {
+            lyricError.set(null);
             lyrics.set(data);
             history.update(history => [...history, {artist: titleCaseArtist, song: titleCaseSong}])
         }

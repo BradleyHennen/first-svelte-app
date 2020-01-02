@@ -1,11 +1,22 @@
 <script>
     import Loader from './Loader.svelte';
     import {fade, fly} from 'svelte/transition';
-    import {fetchLyrics, loading, lyrics, showHistory, currentArtist, currentSong} from '../Store/stores.js';
+    import {fetchLyrics, loading, lyrics, showHistory, currentArtist, currentSong, lyricError} from '../Store/stores.js';
 
     console.warn($lyrics);
     let artist = '';
     let song = '';
+    let alert = '';
+
+    function validation() {
+        if(artist !== '' && song !== '') {
+            alert = '';
+            fetchLyrics(artist, song)
+        }
+        else {
+            alert = 'Please fill out all fields!'
+        }
+    }
 
     function newSearch() {
         lyrics.set(null);
@@ -19,35 +30,42 @@
 <section>
     {#if !$showHistory}
         {#if !$loading && !$lyrics}
-        <span in:fade>
-            <h2>Search For Lyrics</h2>
-            <form>
-                <label for="artist">
-                    Artist
-                    <input id="artist" type="text" class="validate" bind:value={artist}>
-                </label>
-                <label for="song">
-                    Song
-                    <input id="song" type="text" class="validate" bind:value={song}>
-                </label>
-                <br/>
-                <button on:click|preventDefault={() => fetchLyrics(artist, song)}>
-                    Search
-                </button>
-            </form>
-        </span>
+            <span in:fade>
+                <h2>Search For Lyrics</h2>
+                <form>
+                    {#if alert}
+                        <p style={'color: red'}>{alert}</p>
+                    {/if}
+                    <label for="artist">
+                        Artist
+                        <input id="artist" type="text" class="validate" bind:value={artist}>
+                    </label>
+                    <label for="song">
+                        Song
+                        <input id="song" type="text" class="validate" bind:value={song}>
+                    </label>
+                    <br/>
+                    <button on:click|preventDefault={() => validation()}>
+                        Search
+                    </button>
+                </form>
+            </span>
         {/if}
 
         {#if $loading}
             <Loader/>
         {/if}
 
+        {#if $lyricError && !$lyrics && !$loading}
+            <h2>{$lyricError}</h2>
+        {/if}
+
         {#if !$loading && $lyrics}
-            <span in:fly="{{ y: 200, duration: 2000 }}" out:fade="{{duration: 1500 }}">
-                <h3>Artist: {$currentArtist}</h3>
-                <h3>Song: {$currentSong}</h3>
+            <span in:fly="{{ y: 200, duration: 2000 }}">
+                <h2>Artist: {$currentArtist}</h2>
+                <h2>Song: {$currentSong}</h2>
                 <p>{$lyrics.lyrics}</p>
-                <button on:click|preventDefault={() => newSearch()}>New Search</button>
+                <button class="new-search-button" on:click|preventDefault={() => newSearch()}>New Search</button>
             </span>
         {/if}
     {/if}
@@ -79,5 +97,11 @@
     p {
         margin: 2%;
         white-space: pre-wrap;
+    }
+
+    .new-search-button {
+        background-color: teal;
+        color: white;
+        margin: 10% auto 10% auto;
     }
 </style>
